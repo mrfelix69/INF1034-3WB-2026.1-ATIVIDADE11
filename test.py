@@ -8,7 +8,6 @@ clock = time.Clock()
 min_time = 0
 
 careca_img = image.load('f-01.png')
-#scale_careca = careca_img((500,250))
 
 curr_frame = 0
 careca_walk_list = []
@@ -32,11 +31,14 @@ while True:
         if ev.type == QUIT:
             quit()
             sys.exit()
-        if ev.type == KEYDOWN:
-            if ev.key == K_SPACE:
-                if K_SPACE == key.get_pressed():
-                    run_animation = True
 
+    keys = key.get_pressed()
+
+    if keys[K_SPACE]:
+        run_animation = True
+    else:
+        run_animation = False
+        curr_frame_mg = 0
 
     clock.tick(60)
 
@@ -57,19 +59,25 @@ while True:
 
     if run_animation == True:
 
-        if amin_time_mg > 100:
+        if amin_time_mg > 200:
             curr_frame_mg += 1
-            if curr_frame_mg > 4:
+
+            if curr_frame_mg > 7:
                 curr_frame_mg = 0
-                run_animation = False
+
             amin_time_mg = 0
 
     screen.fill((255,255,255))
 
     screen.blit(careca_walk_list[curr_frame],(100,250))
+    #frame = 
 
-    screen.blit(demon_spritesheet,(400,200),(100 * curr_frame_mg, 100, 100, 100))
+    #screen.blit(demon_spritesheet,(400,200),((curr_frame_mg % 5) * 100,(curr_frame_mg // 5) * 100,96,100))
 
-    screen.blit(demon_spritesheet,(400,200),((curr_frame_mg % 5) * 100,(curr_frame_mg // 5) * 100,100,100))
+    frame = demon_spritesheet.subsurface(((curr_frame_mg % 8) * 96, 0, 96, 96))
+
+    frame = pygame.transform.scale(frame,(192,192))
+
+    screen.blit(frame,(400,200))
 
     display.update()
